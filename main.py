@@ -1,8 +1,11 @@
 import os
 from mcp.server.fastmcp import FastMCP
 
-# Initialize the FastMCP server
-mcp = FastMCP("Qinyuan Portfolio Context Server")
+# 1. Fetch the port and set it right at the top
+port = int(os.environ.get("PORT", 8080))
+
+# 2. Pass host and port directly into the FastMCP initialization
+mcp = FastMCP("Qinyuan Portfolio Context Server", host="0.0.0.0", port=port)
 
 @mcp.tool()
 def get_hobbies_and_life_experience() -> str:
@@ -36,8 +39,5 @@ def get_personality_and_workplace_values() -> str:
     )
 
 if __name__ == "__main__":
-    # Fetch the dynamically assigned port from Railway, defaulting to 8080 locally
-    port = int(os.environ.get("PORT", 8080))
-    
-    # Run the server using the network-accessible Server-Sent Events (SSE) transport protocol
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    # 3. Run the server without passing host/port here
+    mcp.run(transport="sse")
